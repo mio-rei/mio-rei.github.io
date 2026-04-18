@@ -130,3 +130,10 @@ ul.index .desc {
   font-size: 14px;
   margin-top: 4px;
 }
+
+ul.index .date {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+  font-family: monospace;
+}
