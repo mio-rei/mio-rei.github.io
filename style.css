@@ -32,6 +32,14 @@ header h1 {
   letter-spacing: 0.08em;
 }
 
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 0 20px;
+}
+
 section p {
   margin: 0 0 20px;
 }
