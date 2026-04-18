@@ -1,0 +1,14 @@
+{
+  "name": "mio-rei.github.io",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsx build.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "marked": "^18.0.1",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
