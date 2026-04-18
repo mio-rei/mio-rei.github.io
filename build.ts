@@ -54,7 +54,6 @@ function buildSection(name: string, sectionLabel: string) {
 }
 
 buildSection('writing', '寫的');
-// 之後的 section 加在這裡：
-// buildSection('thoughts', '想的');
+buildSection('thoughts', '想的');
 
 console.log('done');
