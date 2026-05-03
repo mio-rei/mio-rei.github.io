@@ -82,5 +82,82 @@ function buildSection(name: string, sectionLabel: string) {
 
 buildSection('writing', '寫的');
 buildSection('thoughts', '想的');
+buildNovels();
 
 console.log('done');
+
+// ---------- novels ----------
+
+interface NovelMeta {
+  title: string;
+  desc?: string;
+  date?: string;
+  slug?: string;
+  start_scene: string;
+}
+
+function buildNovels() {
+  const srcDir = path.join(SRC, 'novels');
+  const outDir = path.join(ROOT, 'novels');
+  if (!fs.existsSync(srcDir)) return;
+  fs.mkdirSync(outDir, { recursive: true });
+
+  // copy runtime + style 到 novels/（template 從 novels/<slug>/ 用 ../ 引用）
+  fs.copyFileSync(path.join(SRC, 'novel-runtime.js'), path.join(outDir, 'novel-runtime.js'));
+  fs.copyFileSync(path.join(SRC, 'novel-style.css'), path.join(outDir, 'novel-style.css'));
+
+  const tmpl = fs.readFileSync(path.join(SRC, 'novel-template.html'), 'utf8');
+  const collected: NovelMeta[] = [];
+
+  for (const slug of fs.readdirSync(srcDir)) {
+    const slugDir = path.join(srcDir, slug);
+    if (!fs.statSync(slugDir).isDirectory()) continue;
+
+    const metaPath = path.join(slugDir, 'meta.json');
+    const scenesPath = path.join(slugDir, 'scenes.json');
+    if (!fs.existsSync(metaPath) || !fs.existsSync(scenesPath)) continue;
+
+    const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8')) as NovelMeta;
+    const scenesRaw = fs.readFileSync(scenesPath, 'utf8');
+    // 直接內嵌（會 escape `</script>` 等敏感 token）
+    const safeScenes = scenesRaw.replace(/<\/script/gi, '<\\/script');
+
+    const html = tmpl
+      .replace(/\{\{title\}\}/g, meta.title)
+      .replace(/\{\{desc\}\}/g, meta.desc || '')
+      .replace(/\{\{meta\}\}/g, meta.date || '')
+      .replace(/\{\{slug\}\}/g, slug)
+      .replace(/\{\{start\}\}/g, meta.start_scene)
+      .replace(/\{\{scenes\}\}/g, safeScenes);
+
+    const slugOut = path.join(outDir, slug);
+    fs.mkdirSync(slugOut, { recursive: true });
+    fs.writeFileSync(path.join(slugOut, 'index.html'), html);
+    console.log(`novels/${slug}/index.html`);
+
+    // copy assets/ 若存在
+    const assetsSrc = path.join(slugDir, 'assets');
+    if (fs.existsSync(assetsSrc)) {
+      const assetsOut = path.join(slugOut, 'assets');
+      fs.mkdirSync(assetsOut, { recursive: true });
+      for (const f of fs.readdirSync(assetsSrc)) {
+        fs.copyFileSync(path.join(assetsSrc, f), path.join(assetsOut, f));
+      }
+    }
+
+    collected.push({ ...meta, slug });
+  }
+
+  // 索引頁（novel link 是 <slug>/、不是 <slug>.html）
+  const sorted = [...collected].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const itemsHtml = sorted.map(m => `  <li>
+    <a href="${m.slug}/">${m.title}</a>
+    <div class="date">${m.date || ''}</div>
+    <div class="desc">${m.desc || ''}</div>
+  </li>`).join('\n');
+  const indexHtml = INDEX_TEMPLATE
+    .replace(/\{\{section\}\}/g, '互動')
+    .replace(/\{\{items\}\}/g, itemsHtml);
+  fs.writeFileSync(path.join(outDir, 'index.html'), indexHtml);
+  console.log('novels/index.html');
+}

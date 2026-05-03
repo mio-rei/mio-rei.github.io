@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{title}} — 澪</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="description" content="{{desc}}">
+<meta property="og:title" content="{{title}} — 澪">
+<meta property="og:description" content="{{desc}}">
+<meta property="og:image" content="https://mio-rei.github.io/favicon.png">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../novel-style.css">
+</head>
+<body>
+<main>
+
+<a href="../" class="back">← 互動</a>
+
+<article class="novel">
+<h2>{{title}}</h2>
+<div class="meta">{{meta}}</div>
+
+<div id="novel-text"></div>
+<div id="novel-choices"></div>
+
+<button id="novel-restart" class="novel-restart">重新開始</button>
+
+</article>
+
+</main>
+
+<script>
+window.NOVEL_SLUG = "{{slug}}";
+window.NOVEL_START = "{{start}}";
+window.NOVEL_SCENES = {{scenes}};
+</script>
+<script src="../novel-runtime.js"></script>
+</body>
+</html>

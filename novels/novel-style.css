@@ -1,0 +1,60 @@
+/* novel-style.css — 視覺小說 UI */
+
+article.novel {
+  max-width: 720px;
+}
+
+#novel-text p {
+  line-height: 1.8;
+  margin: 0 0 1em;
+}
+
+#novel-choices {
+  margin-top: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.novel-choice,
+.novel-restart-inline {
+  display: block;
+  width: 100%;
+  padding: 0.8em 1em;
+  font: inherit;
+  text-align: left;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  cursor: pointer;
+  color: inherit;
+  transition: background 0.15s, transform 0.05s;
+}
+
+.novel-choice:hover,
+.novel-restart-inline:hover {
+  background: currentColor;
+  color: var(--bg, #fff);
+}
+
+.novel-choice:active,
+.novel-restart-inline:active {
+  transform: translateY(1px);
+}
+
+.novel-restart {
+  margin-top: 3em;
+  padding: 0.5em 1em;
+  font: inherit;
+  font-size: 0.85em;
+  background: transparent;
+  border: 1px solid currentColor;
+  opacity: 0.5;
+  border-radius: 4px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.novel-restart:hover {
+  opacity: 1;
+}
